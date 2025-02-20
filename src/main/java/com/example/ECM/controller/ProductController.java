@@ -40,11 +40,8 @@ public class ProductController {
             Page<ProductDTO> products = productService.searchProducts(name, categoryId, minPrice, maxPrice, minRating, page, size, sort);
             return ResponseEntity.ok(products);
         } catch (Exception e) {
-            logger.error("Lỗi khi tìm kiếm sản phẩm: {}", e.getMessage(), e); // Ghi lại lỗi cụ thể cho hành động tìm kiếm
-            // Trả về trang trống nếu có lỗi và thêm thông báo lỗi
-            Page<ProductDTO> emptyPage = Page.empty();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(emptyPage);
+            logger.error("Lỗi khi tìm kiếm sản phẩm: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Page.empty());
         }
     }
 
@@ -52,12 +49,10 @@ public class ProductController {
     @GetMapping("/all")
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
         try {
-            List<ProductDTO> products = productService.getAllProducts();
-            return ResponseEntity.ok(products);
+            return ResponseEntity.ok(productService.getAllProducts());
         } catch (Exception e) {
-            logger.error("Lỗi khi lấy danh sách sản phẩm: {}", e.getMessage(), e); // Ghi lại lỗi cho hành động lấy danh sách
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+            logger.error("Lỗi khi lấy danh sách sản phẩm: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -65,14 +60,12 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
         try {
-            Optional<ProductDTO> productDTO = productService.getProductById(id);
-            return productDTO.map(ResponseEntity::ok)
-                    .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                            .body(null));
+            return productService.getProductById(id)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
         } catch (Exception e) {
-            logger.error("Lỗi khi lấy sản phẩm với ID {}: {}", id, e.getMessage(), e); // Ghi lại lỗi cho hành động lấy sản phẩm theo ID
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+            logger.error("Lỗi khi lấy sản phẩm với ID {}: {}", id, e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -81,11 +74,10 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO) {
         try {
-            return ResponseEntity.ok(productService.createProduct(productDTO));
+            return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(productDTO));
         } catch (Exception e) {
-            logger.error("Lỗi khi thêm sản phẩm: {}", e.getMessage(), e); // Ghi lại lỗi cho hành động thêm sản phẩm
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+            logger.error("Lỗi khi thêm sản phẩm: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -94,14 +86,12 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
         try {
-            Optional<ProductDTO> updatedProduct = productService.updateProduct(id, productDTO);
-            return updatedProduct.map(ResponseEntity::ok)
-                    .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                            .body(null));
+            return productService.updateProduct(id, productDTO)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
         } catch (Exception e) {
-            logger.error("Lỗi khi cập nhật sản phẩm với ID {}: {}", id, e.getMessage(), e); // Ghi lại lỗi cho hành động cập nhật sản phẩm
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+            logger.error("Lỗi khi cập nhật sản phẩm với ID {}: {}", id, e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -113,9 +103,8 @@ public class ProductController {
             productService.deleteProduct(id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            logger.error("Lỗi khi xóa sản phẩm với ID {}: {}", id, e.getMessage(), e); // Ghi lại lỗi cho hành động xóa sản phẩm
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+            logger.error("Lỗi khi xóa sản phẩm với ID {}: {}", id, e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -124,14 +113,12 @@ public class ProductController {
     @PatchMapping("/{id}/stock")
     public ResponseEntity<ProductDTO> updateStock(@PathVariable Long id, @RequestParam @Min(1) int quantity) {
         try {
-            Optional<ProductDTO> updatedProduct = productService.updateStock(id, quantity);
-            return updatedProduct.map(ResponseEntity::ok)
-                    .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                            .body(null));
+            return productService.updateStock(id, quantity)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
         } catch (Exception e) {
-            logger.error("Lỗi khi cập nhật số lượng tồn kho cho sản phẩm với ID {}: {}", id, e.getMessage(), e); // Ghi lại lỗi cho hành động cập nhật tồn kho
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+            logger.error("Lỗi khi cập nhật số lượng tồn kho cho sản phẩm với ID {}: {}", id, e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 }
