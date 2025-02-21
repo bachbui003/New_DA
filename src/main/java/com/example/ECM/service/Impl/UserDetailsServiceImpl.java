@@ -1,4 +1,4 @@
-package com.example.ECM.service;
+package com.example.ECM.service.Impl;
 
 import com.example.ECM.model.User;
 import com.example.ECM.repository.UserRepository;

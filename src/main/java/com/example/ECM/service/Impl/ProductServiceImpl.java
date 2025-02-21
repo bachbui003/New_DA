@@ -1,4 +1,4 @@
-package com.example.ECM.service;
+package com.example.ECM.service.Impl;
 
 import com.example.ECM.dto.ProductDTO;
 import com.example.ECM.model.Category;

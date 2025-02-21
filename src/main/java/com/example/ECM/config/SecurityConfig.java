@@ -1,7 +1,7 @@
 package com.example.ECM.config;
 
 import com.example.ECM.service.JwtFilter;
-import com.example.ECM.service.UserDetailsServiceImpl;
+import com.example.ECM.service.Impl.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
